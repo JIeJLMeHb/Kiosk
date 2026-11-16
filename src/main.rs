@@ -34,10 +34,15 @@ fn main() -> Result<()> {
         .with_fullscreen(locked).with_decorations(!locked);
     let opts = eframe::NativeOptions { viewport, vsync: true, ..Default::default() };
 
-    eframe::run_native("PhotoKiosk", opts, Box::new(move |cc| {
+    let res = eframe::run_native("PhotoKiosk", opts, Box::new(move |cc| {
         Ok(Box::new(app::App::new(cc, db, settings, locked)))
-    }))?;
+    }));
+
     kiosk::prevent_sleep(false);
+    if let Err(e) = res {
+        tracing::error!("eframe: {e}");
+        anyhow::bail!("eframe: {e}");   // строкой, без конвертации типа ошибки
+    }
     Ok(())
 }
 

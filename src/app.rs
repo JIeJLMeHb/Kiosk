@@ -68,8 +68,8 @@ impl App {
         let (tags, events, kiosk_enabled, pw) = {
             let c = db.conn.lock().unwrap();
             (repo::all_tags(&c).unwrap_or_default(), repo::events(&c).unwrap_or_default(),
-             repo::get_setting::<bool>(&c, "kiosk.enabled").unwrap_or(Some(false)).unwrap(),
-             repo::get_setting::<String>(&c, "kiosk.pw").unwrap_or(None))
+             repo::get_setting::<bool>(&c, "kiosk.enabled").ok().flatten().unwrap_or(false),
+             repo::get_setting::<String>(&c, "kiosk.pw").ok().flatten())
         };
 
         let mut app = Self {

@@ -3,6 +3,7 @@ use anyhow::Result;
 use rusqlite::{params, params_from_iter, Connection, Row, ToSql};
 use serde::{de::DeserializeOwned, Serialize};
 use crate::model::*;
+use rusqlite::OptionalExtension;   // добавить к импортам repo.rs
 
 const COLS: &str = "p.id,p.hash,p.rel_path,p.width,p.height,p.taken_at,p.taken_src,\
                     p.title,p.note,p.event_id,p.rating,p.hidden";
@@ -164,13 +165,19 @@ pub fn reindex(c: &Connection, id: i64) -> Result<()> {
 }
 
 pub fn get_setting<T: DeserializeOwned>(c: &Connection, key: &str) -> Result<Option<T>> {
-    let v: Option<String> = c.query_row("SELECT value_json FROM settings WHERE key=?1", [key], |r| r.get(0))
-        .ok();
-    Ok(match v { Some(s) => Some(serde_json::from_str(&s)?), None => None })
+    let v: Option<String> = c
+        .query_row("SELECT value_json FROM settings WHERE key=?1", [key], |r| r.get(0))
+        .optional()?;
+    match v {
+        Some(s) => Ok(Some(serde_json::from_str(&s)?)),
+        None => Ok(None),
+    }
 }
+
 pub fn set_setting<T: Serialize>(c: &Connection, key: &str, v: &T) -> Result<()> {
     c.execute("INSERT INTO settings(key,value_json) VALUES(?1,?2)
                ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json",
               params![key, serde_json::to_string(v)?])?;
     Ok(())
 }
+
