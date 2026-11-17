@@ -3,7 +3,7 @@ use anyhow::Result;
 use rusqlite::{params, params_from_iter, Connection, Row, ToSql};
 use serde::{de::DeserializeOwned, Serialize};
 use crate::model::*;
-use rusqlite::OptionalExtension;   // добавить к импортам repo.rs
+use rusqlite::OptionalExtension;
 
 const COLS: &str = "p.id,p.hash,p.rel_path,p.width,p.height,p.taken_at,p.taken_src,\
                     p.title,p.note,p.event_id,p.rating,p.hidden";
@@ -180,4 +180,3 @@ pub fn set_setting<T: Serialize>(c: &Connection, key: &str, v: &T) -> Result<()>
               params![key, serde_json::to_string(v)?])?;
     Ok(())
 }
-

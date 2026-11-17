@@ -8,7 +8,7 @@ use crate::{db::Db, model::*};
 #[derive(Clone, Copy, PartialEq, Debug)] pub enum ImgKind { Thumb, Screen }
 pub struct DecodeReq { pub kind: ImgKind, pub id: i64, pub path: PathBuf }
 
-/// Единственное место, где egui рисует текстуру: при смене версии правьте тут.
+// Единственное место, где egui рисует текстуру
 pub fn paint_image(p: &egui::Painter, tex: &TextureHandle, rect: Rect, uv: Rect, alpha: f32) {
     p.image(tex.id(), rect, uv, Color32::from_white_alpha((alpha.clamp(0.0, 1.0) * 255.0) as u8));
 }
@@ -95,7 +95,7 @@ impl Player {
         let wait = if self.fade_started.is_some() { Duration::from_millis(16) }
                    else { dur.saturating_sub(now.duration_since(self.slide_started))
                             .min(Duration::from_millis(500)) };
-        ctx.request_repaint_after(wait);   // не крутим 60 fps на статичном кадре
+        ctx.request_repaint_after(wait);   // не 60 fps на статичном кадре
     }
 
     /// Рисует кадр и обрабатывает ввод. Возвращает true, если запрошен выход (нужен пароль).

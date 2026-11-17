@@ -181,7 +181,7 @@ impl App {
         }
     }
 
-    // ── UI ────────────────────────────────────────────────────────────────
+    // UI
     fn admin_ui(&mut self, ctx: &egui::Context) {
         egui::TopBottomPanel::top("top").show(ctx, |ui| {
             ui.horizontal(|ui| {
@@ -350,7 +350,7 @@ impl App {
     fn editor(&mut self, ctx: &egui::Context) {
         let Some(mut e) = self.edit.take() else { return };
         let mut open = true;        // egui закрывает окно крестиком
-        let mut save_close = false; // наш флаг «Сохранить»
+        let mut save_close = false; // флаг «Сохранить»
         egui::Window::new(format!("Фото #{}", e.id)).open(&mut open).resizable(true).show(ctx, |ui| {
             ui.horizontal(|ui| { ui.label("Заголовок"); ui.text_edit_singleline(&mut e.title); });
             ui.horizontal(|ui| { ui.label("Дата"); ui.text_edit_singleline(&mut e.date);

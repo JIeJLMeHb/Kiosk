@@ -45,6 +45,7 @@ pub fn set_autostart(enable: bool) -> Result<()> {
 
 #[cfg(windows)]
 pub fn autostart_enabled() -> bool {
+    // TODO (WIP)
     use windows_sys::Win32::System::Registry::*;
     unsafe {
         let path = wide(RUN_KEY);
@@ -62,7 +63,7 @@ pub fn autostart_enabled() -> bool {
 }
 #[cfg(not(windows))] pub fn autostart_enabled() -> bool { false }
 
-// ── Опциональный перехват клавиатуры: cargo build --features kbdhook ──────────
+// Опциональный перехват клавиатуры: cargo build --features kbdhook
 #[cfg(all(windows, feature = "kbdhook"))]
 mod hook {
     use std::ffi::c_void;

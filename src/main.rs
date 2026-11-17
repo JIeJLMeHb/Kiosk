@@ -41,12 +41,12 @@ fn main() -> Result<()> {
     kiosk::prevent_sleep(false);
     if let Err(e) = res {
         tracing::error!("eframe: {e}");
-        anyhow::bail!("eframe: {e}");   // строкой, без конвертации типа ошибки
+        anyhow::bail!("eframe: {e}");
     }
     Ok(())
 }
 
-/// Переносимый режим: если рядом с exe есть data/ — используем её, иначе %LOCALAPPDATA%.
+// Переносимый режим: если рядом с exe есть data/ — используем её, иначе %LOCALAPPDATA%.
 fn default_data_dir() -> PathBuf {
     let exe = std::env::current_exe().unwrap_or_default();
     let beside = exe.parent().map(|p| p.join("data")).unwrap_or_default();

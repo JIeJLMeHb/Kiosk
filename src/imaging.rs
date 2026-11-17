@@ -34,8 +34,8 @@ fn apply_orientation(img: DynamicImage, o: u32) -> DynamicImage {
     }
 }
 
-/// SIMD-ресайз. Если версия fast_image_resize другая — правьте только эту функцию
-/// (запасной вариант: image::imageops::resize(&img, w, h, image::imageops::FilterType::CatmullRom)).
+// SIMD-ресайз
+// (запасной вариант: image::imageops::resize(&img, w, h, image::imageops::FilterType::CatmullRom)).
 fn resize(img: &DynamicImage, nw: u32, nh: u32) -> Result<DynamicImage> {
     use fast_image_resize as fr;
     let src = img.to_rgba8();
